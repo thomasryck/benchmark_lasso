@@ -1,3 +1,4 @@
+import warnings
 from benchopt import BaseSolver
 from benchopt import safe_import_context
 
@@ -5,14 +6,15 @@ from benchopt import safe_import_context
 with safe_import_context() as import_ctx:
     import scipy
     import numpy as np
-    from cyanure import Regression
+    from cyanure import estimators
+    from sklearn.exceptions import ConvergenceWarning
 
 
 class Solver(BaseSolver):
     name = 'Cyanure'
 
     install_cmd = 'conda'
-    requirements = ['mkl', 'pip:cyanure-mkl']
+    requirements = ['cyanure']
     references = [
         'J. Mairal, "Cyanure: An Open-Source Toolbox for Empirical Risk'
         ' Minimization for Python, C++, and soon more," '
@@ -27,18 +29,20 @@ class Solver(BaseSolver):
                 scipy.sparse.isspmatrix_csc(self.X)):
             self.X = scipy.sparse.csr_matrix(self.X)
 
+        warnings.filterwarnings('ignore', category=ConvergenceWarning)
+
         n_samples = self.X.shape[0]
 
-        self.solver = Regression(loss='square', penalty='l1',
-                                 fit_intercept=fit_intercept)
         self.solver_parameter = dict(
-            lambd=self.lmbd / n_samples, solver='auto', it0=1000000,
-            tol=1e-12, verbose=False
+            lambda_1=self.lmbd / n_samples, solver='auto', duality_gap_interval=1000000,
+            tol=1e-12
         )
+        self.solver = estimators.Lasso(fit_intercept=fit_intercept, verbose=False, **self.solver_parameter)
+        
 
     def run(self, n_iter):
-        self.solver.fit(self.X, self.y, max_epochs=n_iter,
-                        **self.solver_parameter)
+        self.solver.max_iter = n_iter
+        self.solver.fit(self.X, self.y)
 
     def get_result(self):
         beta = self.solver.get_weights()
