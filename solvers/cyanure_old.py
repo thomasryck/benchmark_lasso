@@ -24,7 +24,7 @@ class Solver(BaseSolver):
 
         self.solver = Lasso(fit_intercept=fit_intercept)
         self.solver_parameter = dict(
-            lambd=self.lmbd / self.X.shape[0], solver='auto', it0=1000000,
+            lambd=self.lmbd / self.X.shape[0], it0=1000000,
             tol=1e-12, verbose=False, solver=self.solver
         )
     
