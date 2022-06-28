@@ -21,6 +21,10 @@ class Solver(BaseSolver):
         'Arxiv eprint 1912.08165 (2019)'
     ]
 
+    parameters = {
+        'solver': ['catalyst-miso', 'qning-miso', 'qning-ista',  'auto',  'acc-svrg'],
+    }
+
     def set_objective(self, X, y, lmbd, fit_intercept):
         self.X, self.y, self.lmbd = X, y, lmbd
         self.fit_intercept = fit_intercept
@@ -34,7 +38,7 @@ class Solver(BaseSolver):
         n_samples = self.X.shape[0]
 
         self.solver_parameter = dict(
-            lambda_1=self.lmbd / n_samples, solver='auto', duality_gap_interval=1000000,
+            lambda_1=self.lmbd / n_samples, solver=self.solver, duality_gap_interval=1000000,
             tol=1e-12
         )
         self.solver = estimators.Lasso(fit_intercept=fit_intercept, verbose=False, **self.solver_parameter)
