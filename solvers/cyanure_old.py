@@ -22,18 +22,18 @@ class Solver(BaseSolver):
                 scipy.sparse.isspmatrix_csc(self.X)):
             self.X = scipy.sparse.csr_matrix(self.X)
 
-        self.solver = Lasso(fit_intercept=fit_intercept)
+        self.solver_instance = Lasso(fit_intercept=fit_intercept)
         self.solver_parameter = dict(
             lambd=self.lmbd / self.X.shape[0], it0=1000000,
             tol=1e-12, verbose=False, solver=self.solver
         )
     
     def run(self, n_iter):
-        self.solver.fit(self.X, self.y, max_epochs=n_iter,
+        self.solver_instance.fit(self.X, self.y, max_epochs=n_iter,
                         **self.solver_parameter)
 
     def get_result(self):
-        beta = self.solver.get_weights()
+        beta = self.solver_instance.get_weights()
         if self.fit_intercept:
             beta, intercept = beta
             beta = np.r_[beta.flatten(), intercept]

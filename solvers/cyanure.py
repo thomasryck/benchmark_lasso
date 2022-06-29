@@ -22,7 +22,7 @@ class Solver(BaseSolver):
     ]
 
     parameters = {
-        'solver': ['catalyst-miso', 'qning-miso', 'qning-ista',  'auto',  'acc-svrg'],
+        'solver': ['catalyst-miso', 'qning-miso', 'qning-ista',  'auto',  'acc-svrg']
     }
 
     def set_objective(self, X, y, lmbd, fit_intercept):
@@ -41,15 +41,15 @@ class Solver(BaseSolver):
             lambda_1=self.lmbd / n_samples, solver=self.solver, duality_gap_interval=1000000,
             tol=1e-12
         )
-        self.solver = estimators.Lasso(fit_intercept=fit_intercept, verbose=False, **self.solver_parameter)
+        self.solver_instance = estimators.Lasso(fit_intercept=fit_intercept, verbose=False, **self.solver_parameter)
         
 
     def run(self, n_iter):
-        self.solver.max_iter = n_iter
-        self.solver.fit(self.X, self.y)
+        self.solver_instance.max_iter = n_iter
+        self.solver_instance.fit(self.X, self.y)
 
     def get_result(self):
-        beta = self.solver.get_weights()
+        beta = self.solver_instance.get_weights()
         if self.fit_intercept:
             beta, intercept = beta
             beta = np.r_[beta.flatten(), intercept]
