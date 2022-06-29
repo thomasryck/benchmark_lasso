@@ -7,7 +7,7 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(BaseSolver):
-    name = 'Cyanure'
+    name = 'cyanure_old'
 
     install_cmd = 'conda'
     requirements = ['mkl', 'pip:cyanure-mkl']
