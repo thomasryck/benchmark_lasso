@@ -5,6 +5,7 @@ __pycache__
 *.egg-info
 .coverage
 **/outputs
+fil-result/
 
 # IDE specific folders
 .vscode
