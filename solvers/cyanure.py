@@ -11,7 +11,7 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(BaseSolver):
-    name = 'Cyanure'
+    name = 'cyanure_norm'
 
     install_cmd = 'conda'
     requirements = ['cyanure']

@@ -3,7 +3,7 @@ from benchopt import BaseSolver, safe_import_context
 with safe_import_context() as import_ctx:
     import scipy
     import numpy as np
-    from cyanure import Lasso
+    from cyanure_old import Lasso
 
 
 class Solver(BaseSolver):
