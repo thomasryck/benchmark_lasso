@@ -22,6 +22,7 @@ class Solver(BaseSolver):
                 scipy.sparse.isspmatrix_csc(self.X)):
             self.X = scipy.sparse.csr_matrix(self.X)
 
+        self.fit_intercept = fit_intercept
         self.solver_instance = Lasso(fit_intercept=fit_intercept)
         self.solver_parameter = dict(
             lambd=self.lmbd / self.X.shape[0], it0=1000000,
